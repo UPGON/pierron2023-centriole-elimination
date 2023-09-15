@@ -5,8 +5,10 @@ The script is under src/ij_scripts/
 
 ## Estimation of the parameters for the signal intensity decay of two markers in centrioles
 ### Data
-The data consist of signal intensities of centriole markers (Tubulin, SAS-4) for different genotypes (WT, sas-1ts) at different phases (EP, LP, Diplo), with EP < LP < Diplo. 
+The data consist of signal intensities of centriolar proteins (Tubulin, SAS-4) for different genotypes (WT, sas-1ts) at different phases (EP, LP, Diplo), with EP < LP < Diplo. 
 The intensities are obtained by computing the mean of the ROI, from which the background signal has been subtracted.
+Furthermore, all intensities of each phase for each genotype-protein has been scaled by the mean of the EP, assumed to be full initial intensity.
+
 ### Model
 We modelled the intensities for each comparison (phase_{ref} vs phase_{next}) as a Poisson regression, with a log link function. 
 We encoded the phase indicator as a contrast binary vector that is set to zero for the reference phase and set to one for the next phase. 

@@ -1,0 +1,9 @@
+,genotype,protein,phase_ref,phase_next,b0_mean,b0_std,b1_mean,b1_std
+0,WT,Tubulin,EP,LP,4.6,0.02,-0.33,0.05
+1,WT,Tubulin,LP,Diplo,4.27,0.04,-0.29,0.05
+2,sas-1ts,Tubulin,EP,LP,4.6,0.02,-1.08,0.04
+3,sas-1ts,Tubulin,LP,Diplo,3.52,0.03,-0.03,0.05
+4,WT,SAS-4,EP,LP,4.6,0.02,-0.29,0.04
+5,WT,SAS-4,LP,Diplo,4.31,0.04,0.14,0.05
+6,sas-1ts,SAS-4,EP,LP,4.6,0.02,-0.42,0.03
+7,sas-1ts,SAS-4,LP,Diplo,4.18,0.02,-0.26,0.04

@@ -12,6 +12,7 @@ matplotlib.rcParams.update({'font.size': 7,
                             'font.family': 'Helvetica'})
 
 model = 'poisson_glm'
+intensity = 'intensity_scaled_ep'
 with open(f'../models/{model}.stan', 'r') as f:
     model_str = f.read()
 
@@ -33,28 +34,31 @@ def format_ax(ax):
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['bottom'].set_visible(False)
+
     return ax
 
 
 def main():
     data = pd.read_csv('../data/data.csv')
-    genotype_type = pd.CategoricalDtype(categories=['WT', 'sas-1ts'], ordered=True)
-    data['genotype'] = data['genotype'].astype(genotype_type)
 
     fig, axs = plt.subplots(1, 4, figsize=(4 * 1.7, 1.7))
     summary = []
 
     for i, (genotype, protein) in enumerate(comps):
-        ax = axs[i]
-        ax = format_ax(ax)
         sub = data.loc[(data['protein'] == protein) &
                        (data['genotype'] == genotype)].copy()
 
         mean_ep = sub.loc[sub['phase'] == 'EP', 'intensity'].mean()
+        # Multiply by 100 so that the Poisson counts are not 0 or 1 because of the floating point
+        sub['intensity_scaled_ep'] = 100 * sub['intensity'] / mean_ep
 
-        sub['intensity_scaled_ep'] = sub['intensity'] / mean_ep
+        ax = axs[i]
+        ax = format_ax(ax)
 
-        sns.stripplot(data=sub, x='phase', y='intensity_scaled_ep', ax=ax, legend=False, color='black')
+        if intensity == 'intensity_scaled_ep':
+            ax.set_ylim(0, 200)
+
+        sns.stripplot(data=sub, x='phase', y=intensity, ax=ax, legend=False, color='black', size=2, jitter=True)
 
         for comp in phase_comps:
             x_pos, phase1, phase2 = comp
@@ -64,7 +68,7 @@ def main():
                 "N": len(ssub),
                 "J": len(pd.unique(ssub['phase'])),
                 "x": pd.factorize(ssub['phase'])[0],
-                "y": np.array(ssub['intensity_scaled_ep'].astype('int')),
+                "y": np.array(ssub[intensity].astype(int)),
             }
 
             posterior = stan.build(model_str, data=data_dict, random_seed=1993)
@@ -77,9 +81,17 @@ def main():
             b0_std = post_preds['b0'].std().round(2)
             b1_mean = post_preds['b1'].mean().round(2)
             b1_std = post_preds['b1'].std().round(2)
-            post_preds = post_preds.sample(100)
 
-            summary.append(f"{phase1} vs {phase2}, a={b0_mean:.2f}±{b0_std}, b={b1_mean}±{b1_std}\n")
+            stats = {'genotype': genotype,
+                     'protein': protein,
+                     'phase_ref': phase1,
+                     'phase_next': phase2,
+                     'b0_mean': b0_mean,
+                     'b0_std': b0_std,
+                     'b1_mean': b1_mean,
+                     'b1_std': b1_std,
+                     }
+            summary.append(stats)
 
             ax.plot(x_pos, [np.exp(post_preds['b0'].mean()),
                             np.exp(post_preds['b0'].mean() + post_preds['b1'].mean())],
@@ -89,10 +101,10 @@ def main():
                 f"{genotype}, {protein}")
 
     fig.tight_layout()
-    fig.savefig(f'../plots/png/figure7ef.png', dpi=300)
-    fig.savefig(f'../plots/eps/figure7ef.eps', dpi=300, format='eps')
-    with open('../samples/summary.txt', 'w') as f:
-        f.writelines(summary)
+    fig.savefig(f'../plots/png/figure7ef_{intensity}.png', dpi=300)
+    fig.savefig(f'../plots/eps/figure7ef_{intensity}.eps', dpi=300, format='eps')
+    summary_df = pd.DataFrame(summary)
+    summary_df.to_csv(f'../samples/summary_{intensity}.csv')
 
 
 if __name__ == '__main__':
