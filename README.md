@@ -12,6 +12,7 @@ We modelled the intensities for each comparison (phase_{ref} vs phase_{next}) as
 We encoded the phase indicator as a contrast binary vector that is set to zero for the reference phase and set to one for the next phase. 
 Thus, the intensity is $exp^{\alpha}$ for the reference phase and $exp^{\alpha+\beta}$ for the next phase. 
 We imposed two normal priors N(0, 10) over $\alpha$ and $\beta$.
+
 $$ Intensity \sim Poisson(\lambda) $$
 
 $$ log(\lambda)=\alpha+\beta X $$
@@ -21,5 +22,9 @@ $$ \alpha \sim Normal(0,10) $$
 $$ \beta \sim Normal(0,10) $$
 
 ### Sampling and Estimation
-We sampled the posterior and estimated the parameters alpha and beta using the Stan program [ref] via its Python binding PyStan [ref]. 
+We sampled the posterior and estimated the parameters alpha and beta using the Stan program (Stan Development Team, 2023) via its Python binding PyStan (Riddell, Hartikainen and Carter, 2021). 
 Effectively, we ran four chains in parallel for 8000 iterations each. The code for the model and the sampling is available at <url>.
+
+### References
+- Riddell, A., Hartikainen, A., & Carter, M. (2021). PyStan (3.0.0). https://pypi.org/project/pystan
+- Stan Development Team. 2023. Stan Modeling Language Users Guide and Reference Manual, Version 2.33. https://mc-stan.org
