@@ -25,7 +25,13 @@ $$ \beta \sim Normal(0,10) $$
 
 ### Sampling and Estimation
 We sampled the posterior and estimated the parameters alpha and beta using the Stan program (Stan Development Team, 2023) via its Python binding PyStan (Riddell, Hartikainen and Carter, 2021). 
-Effectively, we ran four chains in parallel for 8000 iterations each. The code for the model and the sampling is available at <url>.
+Effectively, we ran four chains in parallel for 8000 iterations each. The code for the model and the sampling is available at in the GitHub repo (https://github.com/UPGON/pierron2023-centriole-elimination) under samples/.
+
+### Interpretation of the coefficients and their uncertainty
+From the fits, we can derive the slope, that is the decrease between the two phases, using the sample of the coefficient $\beta_1$ and its associated uncertainty, summarised with the highest density interval (HDI).
+While both proteins show a decrease between EP and LP, it is more marked for Tubulin with the highest density interval (HDI) for the slope $\beta_1$ between [-0.422, -0.241] for the WT and between [-1.154, -1.011] for the sas-1ts.
+In contrast, the HDI for the slope $\beta_1$ of SAS-4 lies between [-0.380, -0.199]  for WT and between [-0.480, -0.365] for sas-1ts.
+
 
 ### References
 - Riddell, A., Hartikainen, A., & Carter, M. (2021). PyStan (3.0.0). https://pypi.org/project/pystan

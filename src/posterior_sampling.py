@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib
 from matplotlib import pyplot as plt
 import seaborn as sns
+import arviz as az
 
 import warnings
 
@@ -63,7 +64,7 @@ def main():
         for comp in phase_comps:
             x_pos, phase1, phase2 = comp
             ssub = sub.loc[(data['phase'].isin(comp))]
-
+            identifier = f'{genotype}_{protein}_{phase1}_{phase2}_{intensity}'
             data_dict = {
                 "N": len(ssub),
                 "J": len(pd.unique(ssub['phase'])),
@@ -73,6 +74,9 @@ def main():
 
             posterior = stan.build(model_str, data=data_dict, random_seed=1993)
             fit = posterior.sample(num_chains=4, num_samples=8000)
+
+            fit.to_frame().round(3).to_csv(f'../samples/posterior_{identifier}.tsv')
+            az.hdi(fit, hdi_prob=.95).to_dataframe().round(3).to_csv(f'../samples/hdi_{identifier}_95.tsv')
 
             post_preds = pd.DataFrame(np.repeat([0, 1], 1000), columns=['group'])
             post_preds['b0'] = fit.to_frame()['b0']
