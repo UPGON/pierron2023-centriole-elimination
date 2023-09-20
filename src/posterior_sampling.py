@@ -76,7 +76,8 @@ def main():
             fit = posterior.sample(num_chains=4, num_samples=8000)
 
             fit.to_frame().round(3).to_csv(f'../samples/posterior_{identifier}.tsv')
-            az.hdi(fit, hdi_prob=.95).to_dataframe().round(3).to_csv(f'../samples/hdi_{identifier}_95.tsv')
+            hdi = az.hdi(fit, hdi_prob=.95)
+            hdi.to_dataframe().round(3).to_csv(f'../samples/hdi_{identifier}_95.tsv')
 
             post_preds = pd.DataFrame(np.repeat([0, 1], 1000), columns=['group'])
             post_preds['b0'] = fit.to_frame()['b0']
@@ -100,6 +101,8 @@ def main():
             ax.plot(x_pos, [np.exp(post_preds['b0'].mean()),
                             np.exp(post_preds['b0'].mean() + post_preds['b1'].mean())],
                     color='black', alpha=1, lw=1, ls='--')
+            az.plot_hdi(x=x_pos, hdi_data=np.array([np.exp(hdi['b0']), np.exp(hdi['b0'] + hdi['b1'])]),
+                        color='grey', ax=ax, fill_kwargs={'linewidth': 0.})
 
             ax.set_title(
                 f"{genotype}, {protein}")
