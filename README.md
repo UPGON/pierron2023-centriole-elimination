@@ -29,8 +29,8 @@ Effectively, we ran four chains in parallel for 8000 iterations each. The code f
 
 ### Interpretation of the coefficients and their uncertainty
 The coefficient of decay $\beta_1$, that is the decrease between the two phases, is summarised with the 95 % credible interval, hereafter referred to as 95 %-C.I.
-Tubulin decays earlier in the WT than in the sas-1ts (WT: $\beta_1 = -0.33, 95 %-C.I. = [-0.422, -0.241]$; sas-1ts: $\beta_1 = -1.08, 95 %-C.I. = [-1.154, -1.011]$).
-SAS-4 decays likewise, yet with slightly less confidence (WT: $\beta_1 = -0.29, 95 %-C.I. = [-0.380, -0.199]; sas-1ts: $\beta_1 = -0.42, 95 %-C.I. = [-0.480, -0.365]).
+Tubulin decays earlier in the WT than in the sas-1ts (WT: $\beta_1$ = -0.33, 95 %-C.I. = \[-0.422, -0.241\]; sas-1ts: $\beta_1$ = -1.08, 95 %-C.I. = \[-1.154, -1.011\]).
+SAS-4 decays likewise, yet with slightly less confidence (WT: $\beta_1 = -0.29$, 95 %-C.I. = \[-0.380, -0.199\]; sas-1ts: $\beta_1$ = -0.42, 95 %-C.I. = \[-0.480, -0.365\]).
 
 
 ### References
